@@ -39,8 +39,7 @@ class NewChirp extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    
                     ->subject("New Chirp from {$this->chirp->user->name}")
 
                     ->greeting("New Chirp from {$this->chirp->user->name}")

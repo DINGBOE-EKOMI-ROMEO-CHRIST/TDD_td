@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Policies;
+use Illuminate\Auth\Access\Response;
 
 use App\Models\Chirp;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ChirpPolicy
 {
@@ -13,7 +12,7 @@ class ChirpPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;  // Permet à tous les utilisateurs de voir les chirps
     }
 
     /**
@@ -21,7 +20,7 @@ class ChirpPolicy
      */
     public function view(User $user, Chirp $chirp): bool
     {
-        return false;
+        return $chirp->user_id === $user->id;  // Permet à l'utilisateur de voir ses propres "chirps"
     }
 
     /**
@@ -29,23 +28,23 @@ class ChirpPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;  // Permet à tous les utilisateurs de créer des "chirps"
     }
 
     /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, Chirp $chirp): bool
-    {
-        return $chirp->user()->is($user);
-    }
+{
+    return $chirp->user_id === $user->id;
+}
 
     /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Chirp $chirp): bool
     {
-        return false;
+        return $chirp->user_id === $user->id;  // Permet à l'utilisateur de supprimer ses propres "chirps"
     }
 
     /**
@@ -53,7 +52,7 @@ class ChirpPolicy
      */
     public function restore(User $user, Chirp $chirp): bool
     {
-        return $this->update($user, $chirp);
+        return $chirp->user_id === $user->id;  // Permet à l'utilisateur de restaurer ses propres "chirps"
     }
 
     /**
@@ -61,6 +60,6 @@ class ChirpPolicy
      */
     public function forceDelete(User $user, Chirp $chirp): bool
     {
-        return false;
+        return $chirp->user_id === $user->id;  
     }
 }
